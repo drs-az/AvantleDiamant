@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Before the Diamond: An Interactive Exploration</title>
+    
+    <!-- Chosen Palette: Parisian Twilight -->
+    <!-- Application Structure Plan: I designed a single-page application with fixed thematic navigation in the header. This non-linear structure allows users to freely explore facets of the narrative (Characters, Places, Timeline, Themes) rather than passively following chapters. The goal is to transform reading into exploration. The main interaction is centered on character selection that dynamically updates a detailed profile, a clickable timeline that reveals contextual information, and thematic sections that use visuals and quotes to illustrate the manuscript's key concepts. This architecture was chosen for its flexibility and its ability to present a complex narrative in an intuitive and engaging way. -->
+    <!-- Visualization & Content Choices: 1. Characters: (Goal: Compare journeys) A grid of clickable portraits (HTML/CSS) updates a biographical card (JS). Justification: Allows for direct comparison and immersion centered on the drama's actors. 2. Timeline: (Goal: Show change and context) A timeline (Flexbox) with clickable events opening modals (JS). A bar chart (Chart.js) visualizes Satine's rise. Justification: Situates the fiction within real history and quantifies a narrative trajectory. 3. Themes: (Goal: Organize and inform) Interactive cards (HTML/JS) to explore themes like "Art vs. Commerce." Justification: Makes abstract concepts tangible and interactive. 4. Places: (Goal: Compare) A side-by-side presentation (Grid) to contrast the Montmartre of the alleys with that of the Moulin Rouge. Justification: Visually highlights a central conflict of the narrative. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #FDF8F2; /* Warm Neutral Background */
+            font-family: 'Lato', sans-serif;
+            color: #4A4A4A;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #9A1717; /* Deep Red Accent */
+            border-bottom-color: #9A1717;
+        }
+        .character-portrait {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .character-portrait:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .character-portrait.selected {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 4px #D4AF37; /* Gold Accent */
+            border-color: #D4AF37;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -0.625rem;
+            transform: translateY(-50%);
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 9999px;
+            background-color: #FDF8F2;
+            border: 3px solid #D4AF37;
+            z-index: 10;
+        }
+        .modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="main-header" class="bg-opacity-80 bg-[#FDF8F2] backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-2xl font-bold text-[#9A1717]">Avant le Diamant</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#hero" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="#characters" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Characters</a>
+                        <a href="#places" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Places</a>
+                        <a href="#timeline" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Timeline</a>
+                        <a href="#themes" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="relative min-h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: url('http://googleusercontent.com/file_content/4');">
+            <div class="absolute inset-0 bg-black opacity-30"></div>
+            <div class="relative z-10 p-8">
+                <h2 class="text-6xl md:text-8xl font-bold text-white tracking-wider leading-tight font-serif shadow-lg">Before the Diamond</h2>
+                <p class="mt-4 text-xl md:text-2xl text-white max-w-3xl mx-auto font-light shadow-lg">An interactive exploration of ambition, art, and love in Belle Époque Paris.</p>
+            </div>
+        </section>
+
+        <section id="characters" class="py-20 bg-[#FDF8F2]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold font-serif text-[#4A4A4A]">Characters</h2>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-600">Click a portrait to discover the story of those who animated the Montmartre scene.</p>
+                </div>
+
+                <div class="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+                    <div id="char-satine" class="character-portrait text-center" onclick="selectCharacter('satine')">
+                        <img src="https://placehold.co/200x200/d1a3a3/FFFFFF?text=Satine" alt="Satine" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <h3 class="mt-4 font-bold font-serif text-lg">Satine</h3>
+                    </div>
+                    <div id="char-henri" class="character-portrait text-center" onclick="selectCharacter('henri')">
+                        <img src="https://placehold.co/200x200/a3b1d1/FFFFFF?text=Henri" alt="Henri de Toulouse-Lautrec" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <h3 class="mt-4 font-bold font-serif text-lg">Henri</h3>
+                    </div>
+                    <div id="char-christian" class="character-portrait text-center" onclick="selectCharacter('christian')">
+                        <img src="https://placehold.co/200x200/a3d1b1/FFFFFF?text=Christian" alt="Christian" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <h3 class="mt-4 font-bold font-serif text-lg">Christian</h3>
+                    </div>
+                    <div id="char-zidler" class="character-portrait text-center" onclick="selectCharacter('zidler')">
+                        <img src="https://placehold.co/200x200/d1c3a3/FFFFFF?text=Zidler" alt="Harold Zidler" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <h3 class="mt-4 font-bold font-serif text-lg">Zidler</h3>
+                    </div>
+                    <div id="char-duc" class="character-portrait text-center" onclick="selectCharacter('duc')">
+                        <img src="https://placehold.co/200x200/a3a3d1/FFFFFF?text=The+Duke" alt="The Duke of Monroth" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <h3 class="mt-4 font-bold font-serif text-lg">The Duke</h3>
+                    </div>
+                    <div id="char-jane" class="character-portrait text-center" onclick="selectCharacter('jane')">
+                        <img src="https://placehold.co/200x200/c1a3d1/FFFFFF?text=Jane" alt="Jane Avril" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <h3 class="mt-4 font-bold font-serif text-lg">Jane Avril</h3>
+                    </div>
+                </div>
+
+                <div id="character-display" class="mt-16 bg-white p-8 rounded-lg shadow-xl transition-opacity duration-500 opacity-0 min-h-[300px]">
+                </div>
+            </div>
+        </section>
+        
+        <section id="places" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold font-serif text-[#4A4A4A]">The Two Parises</h2>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-600">A world of contrasts, from the dark alleys of the Butte to the dazzling stage of the Moulin Rouge.</p>
+                </div>
+                <div class="mt-12 grid md:grid-cols-2 gap-8 items-start">
+                    <div class="bg-[#FDF8F2] p-8 rounded-lg shadow-lg">
+                        <h3 class="text-3xl font-bold font-serif text-[#9A1717]">The Montmartre of the Alleys</h3>
+                        <p class="mt-4 text-gray-700">Here, in the Quartier des Grandes-Carrières, the air was a thick, layered stew. The warm, yeasty breath from the bakery was a fleeting pleasure, quickly overwhelmed by the acidic stench of urine and stale wine in the gutters, the sweet rot of discarded produce from market stalls, and the metallic tang of blood hosed away from the butcher's shop.</p>
+                        <blockquote class="mt-6 border-l-4 border-[#D4AF37] pl-4 italic text-gray-600">
+                            "Montmartre was her kingdom. A patchwork realm of rooftops and rags."
+                        </blockquote>
+                    </div>
+                    <div class="bg-[#FDF8F2] p-8 rounded-lg shadow-lg">
+                        <h3 class="text-3xl font-bold font-serif text-[#9A1717]">The Moulin Rouge</h3>
+                        <p class="mt-4 text-gray-700">Two men—Joseph Oller, the calculating Catalan businessman, and Charles Zidler, the showman with a voice of brass—had imagined a fantasy: a place where all boundaries blurred. Class. Sex. Art. Profit. They called it "The First Palace of Women." Electric bulbs cast an unnatural, thrilling light on everything, patrons arrived in carriages and left without shame.</p>
+                        <blockquote class="mt-6 border-l-4 border-[#D4AF37] pl-4 italic text-gray-600">
+                            "Everyone thinks Montmartre is freedom. But it’s just a better-dressed trap."
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="py-20 bg-[#FDF8F2]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold font-serif text-[#4A4A4A]">Timeline of an Era</h2>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-600">The characters' fates are woven with the great events of the century's end. Explore the timeline to see how fiction meets history.</p>
+                </div>
+                <div class="mt-16 relative">
+                    <div class="absolute left-4 md:left-1/2 top-0 h-full w-0.5 bg-[#D4AF37] opacity-50"></div>
+                    <div id="timeline-container" class="space-y-12">
+                    </div>
+                </div>
+                <div class="mt-20">
+                    <h3 class="text-center text-3xl font-bold font-serif text-[#4A4A4A]">The Rise of a Star</h3>
+                    <p class="mt-4 text-center text-lg max-w-2xl mx-auto text-gray-600">Satine's career, from shadow to light, illustrates the dazzling trajectory of an ambition.</p>
+                    <div class="mt-8 chart-container">
+                        <canvas id="satineRiseChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold font-serif text-[#4A4A4A]">At the Heart of the Narrative</h2>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-600">Explore the themes that drive the story: the tension between art and commerce, the search for authenticity, and the price of love.</p>
+                </div>
+                <div class="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-[#FDF8F2] p-6 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold font-serif text-[#9A1717]">🎭 Authenticity vs. Performance</h3>
+                        <p class="mt-3 text-gray-700">Each character wears a mask. Satine, the "girl from the fog," becomes the "Sparkling Diamond." Henri, the aristocrat, hides behind his sketchbook. The narrative explores the struggle to preserve a part of oneself in a world that demands constant performance.</p>
+                        <blockquote class="mt-4 border-l-4 border-[#D4AF37] pl-4 italic text-gray-600">"Sometimes I forget which face is mine. The one on your posters... or the one I wash off each night."</blockquote>
+                    </div>
+                    <div class="bg-[#FDF8F2] p-6 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold font-serif text-[#9A1717]">🎨 Art vs. Commerce</h3>
+                        <p class="mt-3 text-gray-700">Henri feels complicit in erasing the "real" Satine by creating her public image. His secret drawings are a penance, an attempt to preserve the truth against the commercial icon he helped Zidler create.</p>
+                        <blockquote class="mt-4 border-l-4 border-[#D4AF37] pl-4 italic text-gray-600">"They hadn't made her eternal. They had *commodified* her."</blockquote>
+                    </div>
+                    <div class="bg-[#FDF8F2] p-6 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold font-serif text-[#9A1717]">❤️ The Faces of Love</h3>
+                        <p class="mt-3 text-gray-700">Love takes three forms: Henri's, observational and sacrificial; Christian's, idealistic and pure; and the Duke's, possessive and transactional. Satine is at the center of this triangle, with each form of love representing a path, a promise, and a danger.</p>
+                        <blockquote class="mt-4 border-l-4 border-[#D4AF37] pl-4 italic text-gray-600">"The greatest thing you'll ever learn is just to love and be loved in return."</blockquote>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#4A4A4A] text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="font-serif">&copy; 2025 Before the Diamond: An Interactive Exploration. Inspired by a tale of the Belle Époque.</p>
+        </div>
+    </footer>
+
+    <div id="modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
+        <div id="modal-content" class="bg-white rounded-lg shadow-2xl p-8 max-w-2xl w-full transform scale-95 transition-transform duration-300">
+            <h3 id="modal-title" class="text-3xl font-bold font-serif text-[#9A1717]"></h3>
+            <p id="modal-body" class="mt-4 text-gray-700"></p>
+            <button onclick="closeModal()" class="mt-6 bg-[#9A1717] text-white px-4 py-2 rounded-md hover:bg-opacity-80 transition-colors">Close</button>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const data = {
+        characters: {
+            satine: {
+                name: "Satine",
+                title: "The Sparkling Diamond",
+                bio: "Born in the alleys of Montmartre, Satine is a force of nature, driven by a fierce ambition to escape poverty. Her dance, first a tool of survival, becomes an art that propels her to the top of the Parisian stage. Intelligent and pragmatic, she learns to navigate a world of powerful men, turning her body and name into a luxury brand, all while fighting not to lose the girl she once was.",
+                quote: "I'd rather be trapped in diamonds than in dust."
+            },
+            henri: {
+                name: "Henri de Toulouse-Lautrec",
+                title: "The Silent Chronicler",
+                bio: "An aristocrat rejected by his own class because of his disability, Henri finds refuge and truth in the honest vulgarity of Montmartre. A brilliant artist, he becomes the unofficial chronicler of this world, capturing its inhabitants with deep empathy. For Satine, he is a silent witness, a protector of her soul, his love for her expressed through hundreds of secret drawings that seek to preserve the truth behind the spectacle.",
+                quote: "I draw the one who danced in the fog."
+            },
+            christian: {
+                name: "Christian",
+                title: "The Idealistic Poet",
+                bio: "Arriving from the provinces with a heart full of poetry, Christian embodies the ideals of Truth, Beauty, Freedom, and Love. His pure idealism and unwavering faith in the power of words and feelings offer Satine a glimpse of a love that cannot be bought or sold. He represents both a promise of redemption and a mortal danger in the transactional world of the Moulin Rouge.",
+                quote: "The greatest thing you'll ever learn is just to love and be loved in return."
+            },
+            zidler: {
+                name: "Harold Zidler",
+                title: "The Curator of Miracles",
+                bio: "A charismatic showman and ruthless businessman, Zidler is the owner and soul of the Moulin Rouge. He sees people and art as commodities to be shaped, promoted, and sold. He is the creator of Satine, the 'Sparkling Diamond,' polishing her into the perfect icon, while ensuring she remains a profitable asset under his control.",
+                quote: "You are no longer a person. You are a promise."
+            },
+            duc: {
+                name: "The Duke of Monroth",
+                title: "The Collector",
+                bio: "The embodiment of the old aristocracy, the Duke is a cold, powerful, and possessive man. He does not see Satine as a woman or an artist, but as a luxury object to be acquired, a perfect addition to his collection of beautiful things. His patronage represents for Satine the ultimate financial security, but also the most absolute form of servitude, a gilded cage of which he holds the key.",
+                quote: "He is not buying your body, my dear. He is buying your light."
+            },
+            jane: {
+                name: "Jane Avril",
+                title: "The Sister in Arms",
+                bio: "A dancer famous for her 'morbid grace,' Jane Avril is an intelligent, melancholic, and observant figure within the Moulin Rouge. Unlike others, she is neither a rival nor a groupie. She is a colleague who understands the brutal rules of the game. She acts as a confidante and a Cassandra for Satine, offering moments of solidarity and lucid warnings about the price of fame.",
+                quote: "They pay to see the light, darling. Never show them the lamp."
+            }
+        },
+        timeline: [
+            { year: 1891, title: "A Dance in the Fog", content: "The story begins. Satine, 16, dances in the alleys of Montmartre. Henri de Toulouse-Lautrec sees her for the first time, captivated by her 'wild geometry.' Their silent ritual of sketch and coin begins." },
+            { year: 1892, title: "The Cabaret of Nothingness", content: "Driven by hunger, Satine makes her professional debut at the macabre Cabaret du Néant. Her dance of life, a rebellion against the venue's deathly theme, catches the eye of impresario Armand Duvet." },
+            { year: 1894, title: "The Dreyfus Affair Erupts", content: "The arrest of Captain Alfred Dreyfus divides France. The political tension becomes a backdrop for the Bohemians' fiery debates, testing their ideals of 'Truth' and 'Justice'." },
+            { year: 1895, title: "The Rival Queen", content: "Satine arrives at the Moulin Rouge, a direct challenge to the reigning queen, La Goulue. Zidler orchestrates an on-stage confrontation where Satine's artistic, refined style triumphs over La Goulue's raw vulgarity. It is the beginning of her transformation into the 'Sparkling Diamond'." },
+            { year: 1896, title: "The Secret Chronicler", content: "Henri, feeling complicit in the 'commodification' of Satine through his public posters, seriously begins his collection of secret drawings. These works are an attempt to preserve the 'real' Satine, the girl he once knew." },
+            { year: 1898, title: "The Poet and the Duke Arrive", content: "Christian arrives in Paris, bringing with him a pure idealism. Simultaneously, the Duke of Monroth enters the scene, offering Zidler a financial rescue in exchange for patronage of Satine, placing her in a gilded cage. The publication of Zola's 'J'accuse...!' ignites political tensions." },
+            { year: 1899, title: "The Meeting", content: "Seeing Satine trapped by the Duke, Henri makes a sacrificial decision. He introduces Christian to Satine, hoping the poet's idealistic love can save the dancer's soul. The three destinies collide." }
+        ]
+    };
+
+    const characterDisplay = document.getElementById('character-display');
+    const timelineContainer = document.getElementById('timeline-container');
+
+    window.selectCharacter = (charKey) => {
+        const characters = document.querySelectorAll('.character-portrait');
+        characters.forEach(c => c.classList.remove('selected'));
+        document.getElementById(`char-${charKey}`).classList.add('selected');
+
+        const charData = data.characters[charKey];
+        characterDisplay.style.opacity = 0;
+        setTimeout(() => {
+            characterDisplay.innerHTML = `
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <img src="https://placehold.co/200x200/${getHexColor(charKey)}/FFFFFF?text=${encodeURIComponent(charData.name)}" alt="${charData.name}" class="w-32 h-32 rounded-full border-4 border-[#D4AF37] flex-shrink-0">
+                    <div class="text-left">
+                        <h3 class="text-3xl font-bold font-serif text-[#9A1717]">${charData.name}</h3>
+                        <p class="text-lg font-semibold text-gray-500">${charData.title}</p>
+                        <p class="mt-4 text-gray-700">${charData.bio}</p>
+                        <blockquote class="mt-4 border-l-4 border-[#D4AF37] pl-4 italic text-gray-600">
+                            "${charData.quote}"
+                        </blockquote>
+                    </div>
+                </div>
+            `;
+            characterDisplay.style.opacity = 1;
+        }, 300);
+    };
+
+    function getHexColor(key) {
+        const colors = { satine: 'd1a3a3', henri: 'a3b1d1', christian: 'a3d1b1', zidler: 'd1c3a3', duc: 'a3a3d1', jane: 'c1a3d1' };
+        return colors[key] || 'cccccc';
+    }
+
+    data.timeline.forEach((item, index) => {
+        const alignmentClass = index % 2 === 0 ? 'md:ml-auto md:pl-16' : 'md:mr-auto md:pr-16 md:text-right';
+        const itemDiv = document.createElement('div');
+        itemDiv.className = `relative w-full md:w-1/2 p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-shadow ${alignmentClass}`;
+        itemDiv.innerHTML = `
+            <h3 class="text-xl font-bold font-serif text-[#9A1717]">${item.year} - ${item.title}</h3>
+            <p class="text-sm text-gray-600 mt-2">${item.content.substring(0, 100)}...</p>
+        `;
+        itemDiv.onclick = () => openModal(item.title, `<p class='font-bold text-gray-800'>${item.year}</p><p class='mt-2'>${item.content}</p>`);
+        const wrapper = document.createElement('div');
+        wrapper.className = "relative flex justify-between items-center w-full";
+        if (index % 2 !== 0) {
+            wrapper.appendChild(itemDiv);
+            wrapper.appendChild(document.createElement('div'));
+        } else {
+            wrapper.appendChild(document.createElement('div'));
+            wrapper.appendChild(itemDiv);
+        }
+        timelineContainer.appendChild(wrapper);
+    });
+    
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modal-content');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+
+    window.openModal = (title, body) => {
+        modalTitle.textContent = title;
+        modalBody.innerHTML = body;
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modalContent.classList.remove('scale-95');
+    };
+
+    window.closeModal = () => {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modalContent.classList.add('scale-95');
+    };
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    const satineRiseCtx = document.getElementById('satineRiseChart').getContext('2d');
+    new Chart(satineRiseCtx, {
+        type: 'bar',
+        data: {
+            labels: ['1891 (Streets)', '1892 (Néant)', '1895 (Moulin Rouge)', '1898 (Diamond)'],
+            datasets: [{
+                label: "Satine's Notoriety",
+                data: [10, 30, 75, 100],
+                backgroundColor: 'rgba(212, 175, 55, 0.6)',
+                borderColor: 'rgba(212, 175, 55, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Level of Fame (Index)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y + '%';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    selectCharacter('satine');
+
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('main section');
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.4
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === entry.target.id) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    navLinks.forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+});
+</script>
+
+</body>
+</html>
