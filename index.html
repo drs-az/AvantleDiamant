@@ -374,10 +374,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             bookViewer.classList.add('hidden');
             if (bookFallback) {
-                bookFallback.classList.remove('hidden');
                 if (window.pdfjsLib && pdfRender) {
                     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.9.179/build/pdf.worker.min.js';
                     pdfjsLib.getDocument('public/book/avant-le-diamant.pdf').promise.then(pdf => {
+                        bookFallback.classList.remove('hidden');
                         for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
                             pdf.getPage(pageNum).then(page => {
                                 const viewport = page.getViewport({ scale: 1.5 });
@@ -390,6 +390,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 page.render({ canvasContext: context, viewport });
                             });
                         }
+                    }).catch(error => {
+                        console.error('Failed to load PDF:', error);
+                        bookFallback.classList.add('hidden');
                     });
                 }
             }
