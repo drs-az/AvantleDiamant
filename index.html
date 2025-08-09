@@ -88,6 +88,7 @@
                         <a href="#places" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Places</a>
                         <a href="#timeline" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Timeline</a>
                         <a href="#themes" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Themes</a>
+                        <a href="#gallery" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Gallery</a>
                         <a href="#book" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Book</a>
                     </div>
                 </div>
@@ -213,6 +214,20 @@
                         <blockquote class="mt-4 border-l-4 border-[#D4AF37] pl-4 italic text-gray-600">"The greatest thing you'll ever learn is just to love and be loved in return."</blockquote>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="py-20 bg-[#FDF8F2]">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold font-serif text-[#4A4A4A]">Gallery</h2>
+                </div>
+                <div class="mt-8 relative flex items-center justify-center">
+                    <button id="prev-slide" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 p-2 rounded-full hover:bg-opacity-100">&#10094;</button>
+                    <img id="gallery-image" src="" alt="" class="max-h-96 w-auto object-contain rounded-lg shadow" />
+                    <button id="next-slide" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 p-2 rounded-full hover:bg-opacity-100">&#10095;</button>
+                </div>
+                <p id="gallery-caption" class="mt-4 text-center text-gray-700"></p>
             </div>
         </section>
 
@@ -370,54 +385,85 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const satineRiseCtx = document.getElementById('satineRiseChart').getContext('2d');
-    new Chart(satineRiseCtx, {
-        type: 'bar',
-        data: {
-            labels: ['1891 (Streets)', '1892 (Néant)', '1895 (Moulin Rouge)', '1898 (Diamond)'],
-            datasets: [{
-                label: "Satine's Notoriety",
-                data: [10, 30, 75, 100],
-                backgroundColor: 'rgba(212, 175, 55, 0.6)',
-                borderColor: 'rgba(212, 175, 55, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Level of Fame (Index)'
-                    }
-                }
+    const satineRiseCanvas = document.getElementById('satineRiseChart');
+    if (satineRiseCanvas) {
+        const satineRiseCtx = satineRiseCanvas.getContext('2d');
+        new Chart(satineRiseCtx, {
+            type: 'bar',
+            data: {
+                labels: ['1891 (Streets)', '1892 (Néant)', '1895 (Moulin Rouge)', '1898 (Diamond)'],
+                datasets: [{
+                    label: "Satine's Notoriety",
+                    data: [10, 30, 75, 100],
+                    backgroundColor: 'rgba(212, 175, 55, 0.6)',
+                    borderColor: 'rgba(212, 175, 55, 1)',
+                    borderWidth: 1
+                }]
             },
-            plugins: {
-                legend: {
-                    display: false
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Level of Fame (Index)'
+                        }
+                    }
                 },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y + '%';
+                                }
+                                return label;
                             }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y + '%';
-                            }
-                            return label;
                         }
                     }
                 }
             }
-        }
-    });
+        });
+    }
 
     selectCharacter('satine');
+
+    const gallerySlides = [
+        { src: 'characters/satine.png', caption: 'Satine at the Moulin Rouge.' },
+        { src: 'characters/henri.png', caption: 'Henri sketching the night away.' },
+        { src: 'characters/christian.png', caption: 'Christian composing verses in Paris.' }
+    ];
+    let currentSlide = 0;
+    const galleryImage = document.getElementById('gallery-image');
+    const galleryCaption = document.getElementById('gallery-caption');
+
+    function showSlide(index) {
+        const slide = gallerySlides[index];
+        galleryImage.src = slide.src;
+        galleryImage.alt = slide.caption;
+        galleryCaption.textContent = slide.caption;
+    }
+
+    document.getElementById('prev-slide').addEventListener('click', () => {
+        currentSlide = (currentSlide - 1 + gallerySlides.length) % gallerySlides.length;
+        showSlide(currentSlide);
+    });
+
+    document.getElementById('next-slide').addEventListener('click', () => {
+        currentSlide = (currentSlide + 1) % gallerySlides.length;
+        showSlide(currentSlide);
+    });
+
+    showSlide(currentSlide);
 
     const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('main section');
