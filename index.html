@@ -113,27 +113,27 @@
 
                 <div class="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
                     <div id="char-satine" class="character-portrait text-center" onclick="selectCharacter('satine')">
-                        <img src="characters/satine.png" alt="Satine" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/satine.png" alt="Satine" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-w-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">Satine</h3>
                     </div>
                     <div id="char-henri" class="character-portrait text-center" onclick="selectCharacter('henri')">
-                        <img src="characters/henri.png" alt="Henri de Toulouse-Lautrec" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/henri.png" alt="Henri de Toulouse-Lautrec" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-w-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">Henri</h3>
                     </div>
                     <div id="char-christian" class="character-portrait text-center" onclick="selectCharacter('christian')">
-                        <img src="characters/christian.png" alt="Christian" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/christian.png" alt="Christian" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-w-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">Christian</h3>
                     </div>
                     <div id="char-zidler" class="character-portrait text-center" onclick="selectCharacter('zidler')">
-                        <img src="characters/zigler.png" alt="Harold Zidler" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/zigler.png" alt="Harold Zidler" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-w-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">Zidler</h3>
                     </div>
                     <div id="char-duc" class="character-portrait text-center" onclick="selectCharacter('duc')">
-                        <img src="characters/duke.png" alt="The Duke of Monroth" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/duke.png" alt="The Duke of Monroth" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-w-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">The Duke</h3>
                     </div>
                     <div id="char-jane" class="character-portrait text-center" onclick="selectCharacter('jane')">
-                        <img src="characters/jane.png" alt="Jane Avril" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/jane.png" alt="Jane Avril" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-w-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">Jane Avril</h3>
                     </div>
                 </div>
@@ -247,37 +247,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: "Satine",
                 title: "The Sparkling Diamond",
                 bio: "Born in the alleys of Montmartre, Satine is a force of nature, driven by a fierce ambition to escape poverty. Her dance, first a tool of survival, becomes an art that propels her to the top of the Parisian stage. Intelligent and pragmatic, she learns to navigate a world of powerful men, turning her body and name into a luxury brand, all while fighting not to lose the girl she once was.",
-                quote: "I'd rather be trapped in diamonds than in dust."
+                quote: "I'd rather be trapped in diamonds than in dust.",
+                image: "characters/satine.png",
             },
             henri: {
                 name: "Henri de Toulouse-Lautrec",
                 title: "The Silent Chronicler",
                 bio: "An aristocrat rejected by his own class because of his disability, Henri finds refuge and truth in the honest vulgarity of Montmartre. A brilliant artist, he becomes the unofficial chronicler of this world, capturing its inhabitants with deep empathy. For Satine, he is a silent witness, a protector of her soul, his love for her expressed through hundreds of secret drawings that seek to preserve the truth behind the spectacle.",
-                quote: "I draw the one who danced in the fog."
+                quote: "I draw the one who danced in the fog.",
+                image: "characters/henri.png",
             },
             christian: {
                 name: "Christian",
                 title: "The Idealistic Poet",
                 bio: "Arriving from the provinces with a heart full of poetry, Christian embodies the ideals of Truth, Beauty, Freedom, and Love. His pure idealism and unwavering faith in the power of words and feelings offer Satine a glimpse of a love that cannot be bought or sold. He represents both a promise of redemption and a mortal danger in the transactional world of the Moulin Rouge.",
-                quote: "The greatest thing you'll ever learn is just to love and be loved in return."
+                quote: "The greatest thing you'll ever learn is just to love and be loved in return.",
+                image: "characters/christian.png",
             },
             zidler: {
                 name: "Harold Zidler",
                 title: "The Curator of Miracles",
                 bio: "A charismatic showman and ruthless businessman, Zidler is the owner and soul of the Moulin Rouge. He sees people and art as commodities to be shaped, promoted, and sold. He is the creator of Satine, the 'Sparkling Diamond,' polishing her into the perfect icon, while ensuring she remains a profitable asset under his control.",
-                quote: "You are no longer a person. You are a promise."
+                quote: "You are no longer a person. You are a promise.",
+                image: "characters/zigler.png",
             },
             duc: {
                 name: "The Duke of Monroth",
                 title: "The Collector",
                 bio: "The embodiment of the old aristocracy, the Duke is a cold, powerful, and possessive man. He does not see Satine as a woman or an artist, but as a luxury object to be acquired, a perfect addition to his collection of beautiful things. His patronage represents for Satine the ultimate financial security, but also the most absolute form of servitude, a gilded cage of which he holds the key.",
-                quote: "He is not buying your body, my dear. He is buying your light."
+                quote: "He is not buying your body, my dear. He is buying your light.",
+                image: "characters/duke.png",
             },
             jane: {
                 name: "Jane Avril",
                 title: "The Sister in Arms",
                 bio: "A dancer famous for her 'morbid grace,' Jane Avril is an intelligent, melancholic, and observant figure within the Moulin Rouge. Unlike others, she is neither a rival nor a groupie. She is a colleague who understands the brutal rules of the game. She acts as a confidante and a Cassandra for Satine, offering moments of solidarity and lucid warnings about the price of fame.",
-                quote: "They pay to see the light, darling. Never show them the lamp."
+                quote: "They pay to see the light, darling. Never show them the lamp.",
+                image: "characters/jane.png"
             }
         },
         timeline: [
@@ -304,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             characterDisplay.innerHTML = `
                 <div class="flex flex-col md:flex-row items-center gap-8">
-                    <img src="https://placehold.co/200x200/${getHexColor(charKey)}/FFFFFF?text=${encodeURIComponent(charData.name)}" alt="${charData.name}" class="w-32 h-32 rounded-full border-4 border-[#D4AF37] flex-shrink-0">
+                    <img src="${charData.image}" alt="${charData.name}" class="w-32 h-32 rounded-full border-4 border-[#D4AF37] flex-shrink-0 object-contain max-w-full">
                     <div class="text-left">
                         <h3 class="text-3xl font-bold font-serif text-[#9A1717]">${charData.name}</h3>
                         <p class="text-lg font-semibold text-gray-500">${charData.title}</p>
@@ -318,11 +324,6 @@ document.addEventListener('DOMContentLoaded', () => {
             characterDisplay.style.opacity = 1;
         }, 300);
     };
-
-    function getHexColor(key) {
-        const colors = { satine: 'd1a3a3', henri: 'a3b1d1', christian: 'a3d1b1', zidler: 'd1c3a3', duc: 'a3a3d1', jane: 'c1a3d1' };
-        return colors[key] || 'cccccc';
-    }
 
     data.timeline.forEach((item, index) => {
         const alignmentClass = index % 2 === 0 ? 'md:ml-auto md:pl-16' : 'md:mr-auto md:pr-16 md:text-right';
