@@ -437,11 +437,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     selectCharacter('satine');
 
-    const gallerySlides = [
-        { src: 'characters/satine.png', caption: 'Satine at the Moulin Rouge.' },
-        { src: 'characters/henri.png', caption: 'Henri sketching the night away.' },
-        { src: 'characters/christian.png', caption: 'Christian composing verses in Paris.' }
-    ];
+const gallerySlides = [
+    { src: 'img/01.png', caption: 'Satine dances barefoot in a rain-slick Montmartre alley at dawn, red skirt flaring, auburn hair damp, laundry overhead, cobblestones shimmering.' },
+    { src: 'img/02.png', caption: 'Henri de Toulouse-Lautrec sketches at Le Mirliton café, green absinthe glowing beside him, dancers and anarchists in the smoky, gaslit room.' },
+    { src: 'img/03.png', caption: 'Satine dances in a foggy alley under lamplight, while Henri, half-hidden in mist, sketches from afar.' },
+    { src: 'img/04.png', caption: 'Henri leaves a coin and folded sketch on damp cobblestones as Satine bows from across the alley, her silhouette framed by lamplight.' },
+    { src: 'img/05.png', caption: 'Satine leaps mid-dance on a coffin-shaped stage at the Cabaret du Néant, skeleton chandeliers overhead, patrons in black staring in stunned silence.' },
+    { src: 'img/06.png', caption: 'Backstage in dim lamplight, Satine stands with arms crossed as the shadowy impresario looms, cigar smoke curling, a crumpled envelope on the vanity.' },
+    { src: 'img/07.png', caption: 'Satine stands across the boulevard, gazing at the glowing Moulin Rouge façade as carriages unload elegant guests, marquee lights reflecting in her eyes.' },
+    { src: 'img/08.png', caption: 'Satine dances alone under a shaft of dusty sunlight on an empty stage, Zidler watching from the shadows, her movement raw and magnetic.' },
+    { src: 'img/09.png', caption: 'Seamstresses cinch Satine into a corset as Zidler watches from behind, sequined fabric scattered on the floor, faint bruises visible on her ribs.' },
+    { src: 'img/10.png', caption: 'Satine’s bold cancan poster is plastered on a Paris wall, passersby gathered, while Henri watches quietly from a shadowed lamppost.' },
+    { src: 'img/11.png', caption: 'Christian scribbles in a notebook at Café Momus while rain streaks the window; Henri and Santiago watch from a nearby table, amused.' },
+    { src: 'img/12.png', caption: 'In a candlelit studio, Bohemians debate the Dreyfus Affair; Henri leans against the wall, Satine watches from a window, Santiago gestures passionately.' },
+    { src: 'img/13.png', caption: 'Split-scene: Satine mid-cancan kick in a blaze of color onstage above, and backstage below, unlacing bloodied shoes before a cracked mirror.' },
+    { src: 'img/14.png', caption: 'Satine, in a loose silk robe, and Henri sit at a small café table with an absinthe fountain between them, speaking quietly in deep shadow.' },
+    { src: 'img/15.png', caption: 'Candlelight reveals a drawer of Henri’s sketches of Satine—laughing, pensive, asleep—his hand hovering over one labeled “After,” rain streaking the window.' },
+    { src: 'img/16.png', caption: 'In a gilded opera box, the Duke offers Satine a diamond brooch; she accepts with a polite smile but avoids his gaze, her reflection turned away.' },
+    { src: 'img/17.png', caption: 'In Henri’s studio, he shows Santiago an intimate sketch of Satine beside her famous poster, Santiago reverent, Henri resigned.' },
+    { src: 'img/18.png', caption: 'Satine descends on a trapeze in glittering light; Christian stares upward in awe while Henri watches Christian instead of her.' },
+    { src: 'img/19.png', caption: 'Triptych: Christian’s tear-bright eyes; Satine’s poised glamour with a flicker of recognition; Henri’s bittersweet half-smile over a glass.' },
+    { src: 'img/20.png', caption: 'Henri, cane in hand, leads Christian toward the glowing backstage hall as Satine’s silhouette fades into shadow, her poster glowing on the wall.' }
+];
     let currentSlide = 0;
     const galleryImage = document.getElementById('gallery-image');
     const galleryCaption = document.getElementById('gallery-caption');
