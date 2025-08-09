@@ -113,27 +113,27 @@
 
                 <div class="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
                     <div id="char-satine" class="character-portrait text-center" onclick="selectCharacter('satine')">
-                        <img src="characters/satine.png" alt="Satine" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/satine.png" alt="Satine" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-h-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">Satine</h3>
                     </div>
                     <div id="char-henri" class="character-portrait text-center" onclick="selectCharacter('henri')">
-                        <img src="characters/henri.png" alt="Henri de Toulouse-Lautrec" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/henri.png" alt="Henri de Toulouse-Lautrec" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-h-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">Henri</h3>
                     </div>
                     <div id="char-christian" class="character-portrait text-center" onclick="selectCharacter('christian')">
-                        <img src="characters/christian.png" alt="Christian" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/christian.png" alt="Christian" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-h-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">Christian</h3>
                     </div>
                     <div id="char-zidler" class="character-portrait text-center" onclick="selectCharacter('zidler')">
-                        <img src="characters/zigler.png" alt="Harold Zidler" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/zigler.png" alt="Harold Zidler" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-h-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">Zidler</h3>
                     </div>
                     <div id="char-duc" class="character-portrait text-center" onclick="selectCharacter('duc')">
-                        <img src="characters/duke.png" alt="The Duke of Monroth" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/duke.png" alt="The Duke of Monroth" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-h-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">The Duke</h3>
                     </div>
                     <div id="char-jane" class="character-portrait text-center" onclick="selectCharacter('jane')">
-                        <img src="characters/jane.png" alt="Jane Avril" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent">
+                        <img src="characters/jane.png" alt="Jane Avril" class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full border-4 border-transparent object-contain max-h-full">
                         <h3 class="mt-4 font-bold font-serif text-lg">Jane Avril</h3>
                     </div>
                 </div>
@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             characterDisplay.innerHTML = `
                 <div class="flex flex-col md:flex-row items-center gap-8">
-                    <img src="${charData.image}" alt="${charData.name}" class="w-32 h-32 rounded-full border-4 border-[#D4AF37] flex-shrink-0 object-cover">
+                    <img src="${charData.image}" alt="${charData.name}" class="w-32 h-32 rounded-full border-4 border-[#D4AF37] flex-shrink-0 object-contain max-h-full">
                     <div class="text-left">
                         <h3 class="text-3xl font-bold font-serif text-[#9A1717]">${charData.name}</h3>
                         <p class="text-lg font-semibold text-gray-500">${charData.title}</p>
